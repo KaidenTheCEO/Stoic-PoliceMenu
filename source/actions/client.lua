@@ -222,12 +222,19 @@ RegisterCommand(
 --Actions
 function PlayerCuffed()
     if not cuffed then
-        ShowNotification("Player Cuffed")
+                ShowNotification({
+            title = "Player Cuffed",
+            type = "success" 
+        })
         TaskPlayAnim(player, "mp_arrest_paired", "crook_p2_back_right", 8.0, -8, 3750, 2, 0, 0, 0, 0)
         Citizen.Wait(4000)
         cuffed = true
     else
-        ShowNotification("Player Uncuffed")
+        ShowNotification({
+            title = "Error",
+            description = "No player nearby",
+            type = "error"  
+        })
         dragged = false
         cuffed = false
         Citizen.Wait(100)
@@ -243,15 +250,25 @@ AddEventHandler(
             isdragging = not isdragging
             plhplayer = tonumber(otherplayer)
             if isdragging then
-                ShowNotification("Dragging Player")
+                ShowNotification({
+                    title = "Player Dragged",
+                    type = "success"
+                })
             else
                 -- Stop dragging, clear tasks and animations for the source ped
                 ClearPedTasksImmediately(PlayerPedId())
                 
-                ShowNotification("Dragging Player Stopped")
+                ShowNotification({
+                    title = "Player Dragging Stopped",
+                    type = "error"
+                })
             end
         else
-            ShowNotification("Error: Not Cuffed")
+            ShowNotification({
+                title = "Error",
+                description = "Player is not cuffed",
+                type = "error"
+            })
         end
     end
 )
@@ -426,7 +443,10 @@ function RemoveWeapons()
     if (distance ~= -1 and distance < 3) then
         TriggerServerEvent("removeplayerweapons", GetPlayerServerId(closeplayer))
     else
-        ShowNotification("Error: No Player Near")
+        ShowNotification({
+            title = "Error",
+            description = "No player nearby",
+            type = "error"})
     end
 end
 
@@ -439,14 +459,21 @@ function ToggleCuffs()
         end
         TaskPlayAnim(player, "mp_arrest_paired", "crook_p2_back_right", 8.0, -8, 3750, 2, 0, 0, 0, 0)
         TriggerServerEvent("cuffplayer", GetPlayerServerId(closeplayer))
-        ShowNotification("Player Cuffed")
+        ShowNotification({
+            title = "Player Cuffed",
+            type = "success"
+        })
         RequestAnimDict("mp_arrest_paired")
         while not HasAnimDictLoaded("mp_arrest_paired") do
             Wait(0)
         end
         TaskPlayAnim(GetPlayerPed(-1), "mp_arrest_paired", "cop_p2_back_right", 8.0, -8, 3750, 2, 0, 0, 0, 0)
     else
-        ShowNotification("Error: No Player Near")
+        ShowNotification({
+            title = "Error",
+            description = "No player nearby",
+            type = "error"
+        })
     end
 end
 
@@ -481,7 +508,11 @@ function ToggleDrag(source)
             animPlaying = false
         end
     else
-        ShowNotification("Error: No Player Near")
+        ShowNotification({
+            title = "Error",
+            description = "No player nearby",
+            type = "error"
+        })
     end
 end
 
@@ -492,7 +523,11 @@ function PutInVehicle(source)
         TriggerServerEvent("forceplayerintovehicle", GetPlayerServerId(closeplayer))
         ClearPedTasksImmediately(source)
     else
-        ShowNotification("Error: No Player Near")
+        ShowNotification({
+            title = "Error",
+            description = "No player nearby",
+            type = "error"
+        })
     end
 end
 
@@ -501,7 +536,11 @@ function UnseatVehicle()
     if (distance ~= -1 and distance < 3) then
         TriggerServerEvent("removeplayerfromvehicle", GetPlayerServerId(closeplayer))
     else
-        ShowNotification("Error: No Player Near")
+        ShowNotification({
+            title = "Error",
+            description = "No player nearby",
+            type = "error"
+        })
     end
 end
 
